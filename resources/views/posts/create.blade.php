@@ -23,8 +23,10 @@
             <div class="mt-5">
                 <label class="font-semibold block">post Creator:</label>
                 <select name="post_creator" class="bg-gray-100 w-full py-3 px-2">
-                    <option value="1">Ahmed</option>
-                    <option value="2">Ali</option>
+                    @foreach($users as $user)
+                    <option value="{{$user->id}}">{{$user->name}}</option>
+                    @endforeach
+
                 </select>
 
             </div>

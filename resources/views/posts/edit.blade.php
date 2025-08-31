@@ -8,24 +8,28 @@
 @section('content')
 
     <div class="mt-5  p-10">
-        <form method="POST" action="{{route('posts.update',1)}}">
+        <form method="POST" action="{{route('posts.update',$post->id)}}">
             @csrf
             @method('PUT')
             <div>
                 <label class="font-semibold block">Title:</label>
-                <input class=" bg-gray-100  rounded p-2 w-full" type="text" name="title"/>
+                <input class=" bg-gray-100  rounded p-2 w-full" type="text" name="title" value="{{$post->title}}"/>
             </div>
 
             <div class="mt-5">
                 <label class="font-semibold block">description:</label>
-                <textarea name="description" class="bg-gray-100 rounded p-2 w-full"></textarea>
+                <textarea name="description" class="bg-gray-100 rounded p-2 w-full">{{$post->description}}</textarea>
             </div>
 
             <div class="mt-5">
                 <label class="font-semibold block">post Creator:</label>
                 <select name="post_creator" class="bg-gray-100 w-full py-3 px-2">
-                    <option value="1">Ahmed</option>
-                    <option value="2">Ali</option>
+                    @foreach($users as $user)
+
+{{--                        <option @if($user->id === $post->user_id) selected @endif value="{{$user->id}}">{{$user->name}}</option>--}}
+
+                        <option @selected($user->id === $post->user_id) value="{{$user->id}}">{{$user->name}}</option>
+                    @endforeach
                 </select>
 
             </div>

@@ -41,23 +41,30 @@
                     @foreach($posts as $post)
 
                         <tr class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200 dark:text-white">
-                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            <th scope="row" class="px-6 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                 {{$post['id']}}
                             </th>
-                            <td class="px-6 py-4">
-                                {{$post['title']}}
+                            <td class="px-6 py-3">
+                                {{$post->title}}
                             </td>
-                            <td class="px-6 py-4">
-                                {{$post['postedBy']}}
+                            <td class="px-6 py-3">
+                                {{$post->user->name}}
                             </td>
-                            <td class="px-6 py-4">
-                                {{$post['createdAt']}}
+                            <td class="px-6 py-3">
+                                {{$post->created_at->format('Y-m-d')}}
                             </td>
-                            <td class="px-6 py-4">
-                                <a href="{{route('posts.show',1)}}" class="bg-cyan-600 px-2 py-2 m-1 rounded text-white font-medium  hover:underline">View</a>
-                                <a href="{{route('posts.edit',1)}}" class="bg-blue-600 px-2 py-2 m-1 rounded text-white
+                            <td class="px-6 py-3">
+                                <a href="{{route('posts.show',$post->id)}}" class="bg-cyan-600 px-2 py-2 m-1 rounded text-white font-medium  hover:underline">View</a>
+                                <a href="{{route('posts.edit',$post->id)}}" class="bg-blue-600 px-2 py-2 m-1 rounded text-white
                                  font-medium hover:underline">Edit</a>
-                                <a href="#" class="bg-red-600 px-2 py-2 m-1 rounded text-white font-medium  hover:underline">delete</a>
+
+                                <form class="inline" method="POST" action="{{route('posts.destroy',$post->id)}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="bg-red-600 px-2 py-2 m-1 rounded text-white font-medium  hover:underline">delete</button>
+                                </form>
+
+
                             </td>
                         </tr>
 

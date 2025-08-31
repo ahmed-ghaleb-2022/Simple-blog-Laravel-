@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -9,34 +11,43 @@ class PostController extends Controller
     public function index()
     {
 
-        $posts = [
-            ['id' => 1, 'title' => 'First Post', 'postedBy' => 'John Doe', 'createdAt' => '2025-8-25 09:00:00'],
-            ['id' => 2, 'title' => 'Second Post', 'postedBy' => 'John Doe', 'createdAt' => '2025-8-25 08:00:00']
-        ];
+        $posts = Post::all();
 
         return view('posts.index', ['posts' => $posts]);
     }
 
-    public function show($postId)
+    public function show(Post $post)
     {
-
-        return view('posts.show');
+        return view('posts.show', ['post' => $post]);
     }
 
     public function create()
     {
-        return view('posts.create');
+        //get all users
+        $users = User::all();
+        return view('posts.create', ['users' => $users]);
     }
 
     public function store()
     {
 
+        $title = request()->title;
+        $description = request()->description;
+        $postCreator = request()->post_creator;
+
+        Post::create([
+            'title' => $title,
+            'description' => $description,
+            'user_id' => $postCreator
+        ]);
+
         return to_route('posts.index');
     }
 
-    public function edit($postId)
+    public function edit(Post $post)
     {
-        return view('posts.edit');
+        $users = User::all();
+        return view('posts.edit', ['post' => $post, 'users' => $users]);
     }
 
     public function update($postId)
@@ -45,6 +56,27 @@ class PostController extends Controller
         $description = request()->description;
         $postCreator = request()->post_creator;
 
+        $postToUpdate = Post::find($postId);
+        $postToUpdate->update([
+            'title' => $title,
+            'description' => $description,
+            'user_id' => $postCreator
+        ]);
+
         return to_route('posts.show', $postId);
+    }
+
+
+
+
+    public function destroy($postId)
+    {
+
+        $post = Post::find($postId);
+        $post->delete();
+
+
+        return to_route('posts.index');
+
     }
 }
